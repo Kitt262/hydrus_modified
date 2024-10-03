@@ -2484,6 +2484,16 @@ class ReviewHowBonedAmI( ClientGUIScrolledPanels.ReviewPanel ):
         num_archive = boned_stats[ 'num_archive' ]
         size_inbox = boned_stats[ 'size_inbox' ]
         size_archive = boned_stats[ 'size_archive' ]
+        png_count = boned_stats['png_count']
+        png_size = boned_stats['png_size']
+        jpg_count = boned_stats['jpg_count']
+        jpg_size = boned_stats['jpg_size']
+        jpeg_count = boned_stats['jpeg_count']
+        jpeg_size = boned_stats['jpeg_size']
+        webm_count = boned_stats['webm_count']
+        webm_size = boned_stats['webm_size']
+        gif_count = boned_stats['gif_count']
+        gif_size = boned_stats['gif_size']
         
         num_total = num_archive + num_inbox
         size_total = size_archive + size_inbox
@@ -2627,6 +2637,64 @@ class ReviewHowBonedAmI( ClientGUIScrolledPanels.ReviewPanel ):
                 QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( size_archive ) ), CC.FLAGS_ON_RIGHT )
                 QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = ClientData.ConvertZoomToPercentage( archive_size_percent ) ), CC.FLAGS_ON_RIGHT )
                 QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( archive_average_filesize ) ), CC.FLAGS_ON_RIGHT )
+                
+                # This creates the blank space between the listings
+                iii = 0
+                while iii < 3: 
+                    QP.AddToLayout(text_table_layout, ClientGUICommon.BetterStaticText(self._files_content_panel, label=''),
+                                   CC.FLAGS_ON_LEFT)
+                    QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                    QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                    QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                    QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                    QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                    iii += 1
+                
+                
+                # This prints the first row
+                QP.AddToLayout( text_table_layout, QW.QWidget( self._files_content_panel ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = 'Count' ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = 'Size' ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
+                # The following print the count for each file type on their each row
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = '*.png' ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusNumbers.ToHumanInt( png_count ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( png_size ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = '*.jpg' ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusNumbers.ToHumanInt( jpg_count ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( jpg_size ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = '*.jpeg' ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusNumbers.ToHumanInt( jpeg_count ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( jpeg_size ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = '*.webm' ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusNumbers.ToHumanInt( webm_count ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( webm_size ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = '*.gif' ), CC.FLAGS_ON_LEFT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusNumbers.ToHumanInt( gif_count ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout( text_table_layout, ClientGUICommon.BetterStaticText( self._files_content_panel, label = HydrusData.ToHumanBytes( gif_size ) ), CC.FLAGS_ON_RIGHT )
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                QP.AddToLayout(text_table_layout, QW.QWidget(self._files_content_panel), CC.FLAGS_ON_LEFT)
+                
                 
             else:
                 
