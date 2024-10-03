@@ -8,6 +8,7 @@ import sqlite3
 import time
 import traceback
 import typing
+import fnmatch
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -213,7 +214,63 @@ def report_speed_to_log( precise_timestamp, num_rows, row_name ):
     summary = 'processed ' + HydrusNumbers.ToHumanInt( num_rows ) + ' ' + row_name + ' at ' + rows_s + ' rows/s'
     
     HydrusData.Print( summary )
-    
+
+
+def count_files_in_target_dir():
+    # Get the current directory (where the script is located)
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+
+    # Move up the directory tree to `/install_dir`
+    target_dir = os.path.abspath(os.path.join(current_dir, '../../../db/client_files'))
+
+    # Verify if the target directory exists
+    if not os.path.isdir(target_dir):
+        print(f"Target directory {target_dir} does not exist.")
+        return
+
+    # Function to count files in the target directory and calculate size
+    return count_files(target_dir)
+
+def count_files(directory):
+    # Define the file patterns to search for
+    file_patterns = ['*.png', '*.jpg', '*.jpeg', '*.webm', '*.gif']
+
+    # Initialize a dictionary to hold counts and sizes
+    file_data = {
+        'png_count': 0, 'png_size': 0,
+        'jpg_count': 0, 'jpg_size': 0,
+        'jpeg_count': 0, 'jpeg_size': 0,
+        'webm_count': 0, 'webm_size': 0,
+        'gif_count': 0, 'gif_size': 0
+    }
+
+    try:
+        # Walk through the directory and its subdirectories
+        for dirpath, dirnames, filenames in os.walk(directory):
+            for filename in filenames:
+                for pattern in file_patterns:
+                    if fnmatch.fnmatch(filename.lower(), pattern):
+                        # Determine the file type and update counts and sizes
+                        if pattern == '*.png':
+                            file_data['png_count'] += 1
+                            file_data['png_size'] += os.path.getsize(os.path.join(dirpath, filename))
+                        elif pattern == '*.jpg':
+                            file_data['jpg_count'] += 1
+                            file_data['jpg_size'] += os.path.getsize(os.path.join(dirpath, filename))
+                        elif pattern == '*.jpeg':
+                            file_data['jpeg_count'] += 1
+                            file_data['jpeg_size'] += os.path.getsize(os.path.join(dirpath, filename))
+                        elif pattern == '*.webm':
+                            file_data['webm_count'] += 1
+                            file_data['webm_size'] += os.path.getsize(os.path.join(dirpath, filename))
+                        elif pattern == '*.gif':
+                            file_data['gif_count'] += 1
+                            file_data['gif_size'] += os.path.getsize(os.path.join(dirpath, filename))
+    except OSError as e:
+        print(f"Error accessing directory: {e}")
+
+    return file_data
+
 
 class JobDatabaseClient( HydrusDBBase.JobDatabase ):
     
@@ -2658,6 +2715,18 @@ class DB( HydrusDB.HydrusDB ):
         num_archive = num_total - num_inbox
         size_archive = size_total - size_inbox
         
+        file_count_size = count_files_in_target_dir()
+        
+        boned_stats['png_count'] = file_count_size['png_count']
+        boned_stats['png_size'] = file_count_size['png_size']
+        boned_stats['jpg_count'] = file_count_size['jpg_count']
+        boned_stats['jpg_size'] = file_count_size['jpg_size']
+        boned_stats['jpeg_count'] = file_count_size['jpeg_count']
+        boned_stats['jpeg_size'] = file_count_size['jpeg_size']
+        boned_stats['webm_count'] = file_count_size['webm_count']
+        boned_stats['webm_size'] = file_count_size['webm_size']
+        boned_stats['gif_count'] = file_count_size['gif_count']
+        boned_stats['gif_size'] = file_count_size['gif_size']
         boned_stats[ 'num_inbox' ] = num_inbox
         boned_stats[ 'num_archive' ] = num_archive
         boned_stats[ 'size_inbox' ] = size_inbox
